@@ -1,7 +1,8 @@
 // src/components/Login.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { login } from "../redux/authActions";
+import { Navigate } from "react-router-dom";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -31,35 +32,44 @@ const Login = () => {
       alert("Username dan password harus diisi.");
     }
   };
+  const token = localStorage.getItem("token");
 
-  return (
-    <div className="login-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label htmlFor="username">Username</label>
-          <input
-            type="text"
-            id="username"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-          />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-    </div>
-  );
+  useEffect(() => {
+    console.log(token);
+  }, []);
+
+  if (token) {
+    return <Navigate replace to="/home" />;
+  } else {
+    return (
+      <div className="login-container">
+        <h2>Login</h2>
+        <form onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="username">Username</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+      </div>
+    );
+  }
 };
 
 export default Login;
